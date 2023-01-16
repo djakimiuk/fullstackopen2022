@@ -8,11 +8,27 @@ const FeedbackHandle = ({ handleClick, text }) => {
   );
 };
 
-const FeedbackDisplay = ({ text, counter }) => {
+const Statistics = ({ good, neutral, bad }) => {
+  const sumAll = good + neutral + bad;
+  const average = (good - bad) / sumAll;
+  const positive = (good / sumAll) * 100;
+  if (sumAll === 0) {
+    return <p>No feedback given</p>;
+  }
   return (
     <>
       <p>
-        {text} {counter}
+        good {good}
+        <br></br>
+        neutral {neutral}
+        <br></br>
+        bad {bad}
+        <br></br>
+        all {sumAll}
+        <br></br>
+        average {average}
+        <br></br>
+        positive {positive} %
       </p>
     </>
   );
@@ -34,12 +50,7 @@ const App = () => {
       />
       <FeedbackHandle handleClick={() => setBad(bad + 1)} text={"bad"} />
       <h1>statistics</h1>
-      <FeedbackDisplay text="good" counter={good} />
-      <FeedbackDisplay text="neutral" counter={neutral} />
-      <FeedbackDisplay text="bad" counter={bad} />
-      <FeedbackDisplay text="all" counter={good + neutral + bad} />
-      <FeedbackDisplay text="average" counter={(good * 1 + bad * (-1)) / (good + neutral + bad)} />
-      <FeedbackDisplay text="positive" counter={((good / (good + neutral + bad)) * 100) + " %"} />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
