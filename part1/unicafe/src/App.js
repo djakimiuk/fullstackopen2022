@@ -37,6 +37,9 @@ const App = () => {
       <FeedbackDisplay text="good" counter={good} />
       <FeedbackDisplay text="neutral" counter={neutral} />
       <FeedbackDisplay text="bad" counter={bad} />
+      <FeedbackDisplay text="all" counter={good + neutral + bad} />
+      <FeedbackDisplay text="average" counter={(good * 1 + bad * (-1)) / (good + neutral + bad)} />
+      <FeedbackDisplay text="positive" counter={((good / (good + neutral + bad)) * 100) + " %"} />
     </div>
   );
 };
