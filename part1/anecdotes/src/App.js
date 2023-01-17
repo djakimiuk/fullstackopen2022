@@ -22,13 +22,22 @@ const App = () => {
     setVotes(newVotes);
   };
 
+  const getHighestVote = () => {
+    const mostVotes = Math.max(...votes);
+    return votes.indexOf(mostVotes);
+  };
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
       <br></br>
       has {votes[selected]} votes <br></br>
       <button onClick={handleVoteClick}>vote</button>
       <button onClick={() => setSelected(randomNumber)}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      {anecdotes[getHighestVote()]} <br></br>
+      has {votes[getHighestVote()]} votes <br></br>
     </div>
   );
 };
