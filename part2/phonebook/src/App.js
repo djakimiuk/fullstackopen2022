@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 import personService from "./services/persons";
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterValue, setFilterValue] = useState("");
+  const [notificationMsg, setNotificationMsg] = useState(null);
 
   useEffect(() => {
     personService.getPersons().then((personList) => setPersons(personList));
@@ -35,9 +37,13 @@ const App = () => {
     };
 
     if (!persons.find((person) => person.name === newPerson.name)) {
-      personService
-        .addPerson(newPerson)
-        .then((returnedPerson) => setPersons(persons.concat(returnedPerson)));
+      personService.addPerson(newPerson).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        setNotificationMsg(`Added ${returnedPerson.name}`);
+        setTimeout(() => {
+          setNotificationMsg(null);
+        }, 5000);
+      });
     } else if (
       window.confirm(
         `${newPerson.name} already added to phonebook, replace the old number with a new one?`
@@ -50,13 +56,19 @@ const App = () => {
 
       personService
         .updatePerson(personToModify.id, updatedPerson)
-        .then((returnedPerson) =>
+        .then((returnedPerson) => {
           setPersons(
             persons.map((person) =>
               person.id !== personToModify.id ? person : returnedPerson
             )
-          )
-        );
+          );
+          setNotificationMsg(
+            `Updated ${newPerson.name}'s number to ${newPerson.number}`
+          );
+          setTimeout(() => {
+            setNotificationMsg(null);
+          }, 5000);
+        });
     }
     setNewName("");
     setNewNumber("");
@@ -80,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMsg} />
 
       <Filter
         filterValue={filterValue}
