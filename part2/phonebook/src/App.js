@@ -11,7 +11,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterValue, setFilterValue] = useState("");
-  const [notificationMsg, setNotificationMsg] = useState(null);
+  const [notificationMsg, setNotificationMsg] = useState({
+    body: null,
+    error: false,
+  });
 
   useEffect(() => {
     personService.getPersons().then((personList) => setPersons(personList));
@@ -39,9 +42,12 @@ const App = () => {
     if (!persons.find((person) => person.name === newPerson.name)) {
       personService.addPerson(newPerson).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
-        setNotificationMsg(`Added ${returnedPerson.name}`);
+        setNotificationMsg({
+          body: `Added ${returnedPerson.name}`,
+          error: false,
+        });
         setTimeout(() => {
-          setNotificationMsg(null);
+          setNotificationMsg({ body: null, error: false });
         }, 5000);
       });
     } else if (
@@ -62,11 +68,24 @@ const App = () => {
               person.id !== personToModify.id ? person : returnedPerson
             )
           );
-          setNotificationMsg(
-            `Updated ${newPerson.name}'s number to ${newPerson.number}`
+          setNotificationMsg({
+            body: `Updated ${newPerson.name}'s number to ${newPerson.number}`,
+            error: false,
+          });
+          setTimeout(() => {
+            setNotificationMsg({ body: null, error: false });
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotificationMsg({
+            body: `Information of ${newPerson.name} has already been removed from server`,
+            error: true,
+          });
+          setPersons(
+            persons.filter((person) => person.id !== personToModify.id)
           );
           setTimeout(() => {
-            setNotificationMsg(null);
+            setNotificationMsg({ body: null, error: false });
           }, 5000);
         });
     }
@@ -79,7 +98,19 @@ const App = () => {
     if (window.confirm(`Delete ${personToDelete.name} ?`)) {
       personService
         .deletePerson(id)
-        .then(setPersons(persons.filter((person) => person.id !== id)));
+        .then(setPersons(persons.filter((person) => person.id !== id)))
+        .catch((error) => {
+          setNotificationMsg({
+            body: `Information of ${personToDelete.name} has already been removed from server`,
+            error: true,
+          });
+          setPersons(
+            persons.filter((person) => person.id !== personToDelete.id)
+          );
+          setTimeout(() => {
+            setNotificationMsg({ body: null, error: false });
+          }, 5000);
+        });
     }
     return;
   };
