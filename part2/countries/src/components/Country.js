@@ -28,5 +28,4 @@ const Country = ({ countriesList }) => {
     </>
   ) : null;
 };
-
 export default Country;

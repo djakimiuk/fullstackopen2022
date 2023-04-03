@@ -26,6 +26,8 @@ const App = () => {
       )
     : [];
 
+  const countryToDisplay =
+    countriesToDisplay.length === 1 ? countriesToDisplay : [];
   return (
     <div>
       <span>find countries</span>
@@ -34,7 +36,7 @@ const App = () => {
         <p>Too many matches, specify another filter</p>
       ) : null}
       <Countries countriesList={countriesToDisplay} />
-      <Country countriesList={countriesToDisplay} />
+      <Country countriesList={countryToDisplay} />
     </div>
   );
 };
