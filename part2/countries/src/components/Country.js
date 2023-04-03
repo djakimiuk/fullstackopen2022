@@ -7,7 +7,7 @@ const Country = ({ countriesList }) => {
   return countriesList.length === 1 ? (
     <>
       {countriesList.map((country) => (
-        <>
+        <div key={country.name.common}>
           <h1>{country.name.common}</h1>
           <p>capital {country.capital}</p>
           <p>area {country.area}</p>
@@ -23,7 +23,7 @@ const Country = ({ countriesList }) => {
             width={150}
             height={150}
           />
-        </>
+        </div>
       ))}
     </>
   ) : null;
