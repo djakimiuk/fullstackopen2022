@@ -19,7 +19,7 @@ const Countries = ({ countriesList }) => {
                 </button>
               </p>
               {selectedCountry.includes(country.name.common) ? (
-                <Country countriesList={[country]} />
+                <Country countryToDisplay={[country]} />
               ) : null}
             </div>
           ))

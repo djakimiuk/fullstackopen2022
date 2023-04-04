@@ -7,12 +7,12 @@ import Country from "./components/Country";
 const App = () => {
   const [filterValue, setFilterValue] = useState("");
   const [countries, setCountries] = useState([]);
+
   const URL = `https://restcountries.com/v3.1/all`;
   useEffect(() => {
     axios
       .get(URL)
-      .then((response) => response.data)
-      .then((countriesList) => setCountries(countriesList))
+      .then((response) => setCountries(response.data))
       .catch((error) => console.log(`There was an error ${error}`));
   });
 
@@ -36,7 +36,7 @@ const App = () => {
         <p>Too many matches, specify another filter</p>
       ) : null}
       <Countries countriesList={countriesToDisplay} />
-      <Country countriesList={countryToDisplay} />
+      <Country countryToDisplay={countryToDisplay} />
     </div>
   );
 };

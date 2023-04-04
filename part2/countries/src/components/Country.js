@@ -1,12 +1,14 @@
 import React from "react";
+import WeatherInfo from "./WeatherInfo";
 
-const Country = ({ countriesList }) => {
-  const languages = countriesList.map((country) => country.languages);
+const Country = ({ countryToDisplay }) => {
+  const languages = countryToDisplay.map((country) => country.languages);
   const obj = languages[0];
   const languagesValues = obj ? Object.values(obj) : [];
-  return countriesList.length === 1 ? (
+
+  return countryToDisplay.length === 1 ? (
     <>
-      {countriesList.map((country) => (
+      {countryToDisplay.map((country) => (
         <div key={country.name.common}>
           <h1>{country.name.common}</h1>
           <p>capital {country.capital}</p>
@@ -23,6 +25,7 @@ const Country = ({ countriesList }) => {
             width={150}
             height={150}
           />
+          <WeatherInfo capitalCity={country.capital[0]} />
         </div>
       ))}
     </>
