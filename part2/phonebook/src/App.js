@@ -39,7 +39,11 @@ const App = () => {
       number: newNumber,
     };
 
-    if (!persons.find((person) => person.name === newPerson.name)) {
+    const existingPersonInPhonebook = persons.find(
+      (person) => person.name === newPerson.name
+    );
+
+    if (!existingPersonInPhonebook) {
       personService.addPerson(newPerson).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
         setNotificationMsg({
@@ -55,17 +59,19 @@ const App = () => {
         `${newPerson.name} already added to phonebook, replace the old number with a new one?`
       )
     ) {
-      const personToModify = persons.find(
-        (person) => person.name === newPerson.name
-      );
-      const updatedPerson = { ...personToModify, number: newPerson.number };
+      const updatedPerson = {
+        ...existingPersonInPhonebook,
+        number: newPerson.number,
+      };
 
       personService
-        .updatePerson(personToModify.id, updatedPerson)
+        .updatePerson(existingPersonInPhonebook.id, updatedPerson)
         .then((returnedPerson) => {
           setPersons(
             persons.map((person) =>
-              person.id !== personToModify.id ? person : returnedPerson
+              person.id !== existingPersonInPhonebook.id
+                ? person
+                : returnedPerson
             )
           );
           setNotificationMsg({
@@ -82,7 +88,9 @@ const App = () => {
             error: true,
           });
           setPersons(
-            persons.filter((person) => person.id !== personToModify.id)
+            persons.filter(
+              (person) => person.id !== existingPersonInPhonebook.id
+            )
           );
           setTimeout(() => {
             setNotificationMsg({ body: null, error: false });
