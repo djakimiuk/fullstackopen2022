@@ -44,16 +44,28 @@ const App = () => {
     );
 
     if (!existingPersonInPhonebook) {
-      personService.addPerson(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        setNotificationMsg({
-          body: `Added ${returnedPerson.name}`,
-          error: false,
+      personService
+        .addPerson(newPerson)
+        .then((returnedPerson) => {
+          setPersons(persons.concat(returnedPerson));
+          setNotificationMsg({
+            body: `Added ${returnedPerson.name}`,
+            error: false,
+          });
+          setTimeout(() => {
+            setNotificationMsg({ body: null, error: false });
+          }, 5000);
+        })
+        .catch((error) => {
+          setNotificationMsg({
+            body: `${error.response.data.error}`,
+            error: true,
+          });
+          setTimeout(() => {
+            setNotificationMsg({ body: null, error: false });
+          }, 5000);
+          console.log(error.response.data.error);
         });
-        setTimeout(() => {
-          setNotificationMsg({ body: null, error: false });
-        }, 5000);
-      });
     } else if (
       window.confirm(
         `${newPerson.name} already added to phonebook, replace the old number with a new one?`
